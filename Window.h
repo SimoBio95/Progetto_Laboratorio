@@ -12,8 +12,15 @@ public:
     ~Window(){}
     bool isOpen();
     void getEvent();
-    void Draw();
+    void DrawSprite(sf::Sprite&);
+    void DrawRectangle(sf::RectangleShape&);
     void RenderGame();
+    void clear();
+    void display();
+    sf::RectangleShape returnSfondo();
+
+    sf::Vector2f getSize();
+
 private:
     sf::RenderWindow* Finestra;
     sf::VideoMode VideoMode;

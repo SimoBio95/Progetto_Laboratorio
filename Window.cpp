@@ -12,10 +12,13 @@ Window::Window(){
     this->SfondoFinestra.setSize(sf::Vector2f (Finestra->getSize().x,Finestra->getSize().y));
 };
 
-void Window::Draw() {
-    Finestra->draw(SfondoFinestra);
+void Window::DrawSprite(sf::Sprite& sprite) {
+    Finestra->draw(sprite);
 }
 
+void Window::DrawRectangle(sf::RectangleShape & rectangle){
+    Finestra->draw(rectangle);
+}
 
 bool Window::isOpen() {
    return Finestra->isOpen();
@@ -34,4 +37,20 @@ void Window::getEvent() {
         if(Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape)
             Finestra->close();
     }
+}
+
+sf::Vector2f Window::getSize() {
+    return sf::Vector2f(VideoMode.width,VideoMode.height);
+}
+
+void Window::clear() {
+    Finestra->clear();
+}
+
+void Window::display() {
+    Finestra->display();
+}
+
+sf::RectangleShape Window::returnSfondo() {
+    return SfondoFinestra;
 }

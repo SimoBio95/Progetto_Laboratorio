@@ -4,7 +4,15 @@ project(Progetto_Laboratorio)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(Progetto_Laboratorio  main.cpp
-        Window.cpp)
+        Window.cpp
+        GameCharacter.cpp
+        GameCharacter.h
+        Weapon.cpp
+        Weapon.h
+        GameEngine.cpp
+        GameEngine.h
+        Player.cpp
+        Player.h)
 
 include_directories(/usr/local/include)
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
