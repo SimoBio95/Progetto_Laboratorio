@@ -12,7 +12,8 @@ add_executable(Progetto_Laboratorio  main.cpp
         GameEngine.cpp
         GameEngine.h
         Player.cpp
-        Player.h)
+        Player.h
+)
 
 include_directories(/usr/local/include)
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

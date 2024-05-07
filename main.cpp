@@ -10,6 +10,12 @@ int main() {
     Window Finestra;
     Player Giocatore;
     GameEngine Game(&Finestra,Giocatore);
+
+
     Game.GameRun();
+
+
 return 0;
 }
+
+//Continuare con Proiettili, arma e quindi con texture nuove.

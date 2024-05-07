@@ -24,23 +24,24 @@ bool Window::isOpen() {
    return Finestra->isOpen();
 }
 
-void Window::RenderGame() {
-   Finestra->clear();
-   Finestra->draw(SfondoFinestra);
-   Finestra->display();
-}
-
 void Window::getEvent() {
     while(Finestra->pollEvent(Event)){
-        if(Event.type == sf::Event::Closed)
-            Finestra->close();
-        if(Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape)
-            Finestra->close();
+        switch(Event.type){
+            case sf::Event::EventType::Closed:
+                Finestra->close();
+                break;
+            case sf::Event::EventType::KeyPressed:
+            if(Event.key.code == sf::Keyboard::Escape)
+                Finestra->close();
+            break;
+        }
     }
 }
 
-sf::Vector2f Window::getSize() {
-    return sf::Vector2f(VideoMode.width,VideoMode.height);
+sf::Vector2u Window::getSize() const {
+    unsigned int width = VideoMode.width;
+    unsigned int height = VideoMode.height;
+    return {width,height};
 }
 
 void Window::clear() {

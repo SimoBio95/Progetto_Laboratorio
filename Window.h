@@ -14,12 +14,11 @@ public:
     void getEvent();
     void DrawSprite(sf::Sprite&);
     void DrawRectangle(sf::RectangleShape&);
-    void RenderGame();
     void clear();
     void display();
     sf::RectangleShape returnSfondo();
 
-    sf::Vector2f getSize();
+    sf::Vector2u getSize() const;
 
 private:
     sf::RenderWindow* Finestra;

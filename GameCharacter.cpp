@@ -2,6 +2,7 @@
 #include "GameCharacter.h"
 
 GameCharacter::GameCharacter(int atk, int hp, int def):atk(atk),hp(hp),def(def) {
+
 }
 
 int GameCharacter::getHP() {

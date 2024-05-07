@@ -9,9 +9,23 @@
 class Player:public GameCharacter {
 public:
     Player();
+
     sf::Sprite getSprite();
 
+    void Movement(sf::Sprite&);
+    void Collision(float,float,sf::Sprite&);
+
+    void setUpSprite(sf::Sprite&,float,float);
+    void setUpTexture(sf::Sprite&);
+
+    void animation(sf::Time,int,int,sf::Sprite&) override;
+
+
+
+    sf::Vector2i spriteSize = sf::Vector2i (27,32);
+
 private:
+
 };
 
 
