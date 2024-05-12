@@ -6,7 +6,7 @@ Window::Window(){
     this->VideoMode.height = 1080;
     this->Finestra = new sf::RenderWindow(this->VideoMode,"Laboratorio",sf::Style::Default);
     Finestra->setFramerateLimit(60);
-    if(!SfondoTexture.loadFromFile("../Sprite/Texture_Generali/Sfondo1.png"))
+    if(!SfondoTexture.loadFromFile("../Sprite/Texture_Generali/sfondoeffettivo.png"))
         std::cout<<"Sfondo non caricato"<<std::endl;
     this->SfondoFinestra.setTexture(&(this->SfondoTexture));
     this->SfondoFinestra.setSize(sf::Vector2f (Finestra->getSize().x,Finestra->getSize().y));

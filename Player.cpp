@@ -20,6 +20,7 @@ sf::Sprite Player::getSprite() {
 }
 
 void Player::Movement(sf::Sprite& sprite) {
+    sprite.move(0,5);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         setUpTexture(sprite);
         sprite.move(-10.f,0);
@@ -30,16 +31,26 @@ void Player::Movement(sf::Sprite& sprite) {
         sprite.move(10.f,0);
         sprite.setTextureRect(sf::IntRect(0,0,25,32));
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        setUpTexture(sprite);
-        sprite.move(0,-10.f);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+       if(!isJumping){
+           currentVelocity .x = 0;
+           currentVelocity.y = jumpVelocity;
+           isJumping = true;
+       }
+       currentVelocity.y += gravity;
+       sprite.move(currentVelocity);
+       if(sprite.getPosition().y >= (1080 - sprite.getGlobalBounds().height*3 +45)){
+           sprite.setPosition(sprite.getPosition().x,1080 - sprite.getGlobalBounds().height*3 +45 );
+           currentVelocity.y = 0;
+           isJumping = false;
+       }
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
         setUpTexture(sprite);
         sprite.move(0,10.f);
         sprite.setTextureRect(sf::IntRect (95,0,25,32));
     }
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)){
         eventoinGame = shooting;
         setUpTexture(sprite);
         eventoinGame = normal_mode;
@@ -62,7 +73,7 @@ void Player::Collision(float x,float y,sf::Sprite& sprite){
 void Player::setUpSprite(sf::Sprite& sprite,float x,float y){
     sprite.setOrigin(0,0);
     sprite.setScale(3,3);
-    sprite.setPosition(0,y - sprite.getGlobalBounds().height*3 + 45);
+    sprite.setPosition(0,y - sprite.getGlobalBounds().height);
 }
 
 void Player::setUpTexture(sf::Sprite& sprite) {
@@ -82,7 +93,7 @@ void Player::setUpTexture(sf::Sprite& sprite) {
 
 void Player::animation (sf::Time time,int n_Frames,int AnimationDuration,sf::Sprite& sprite){
     float timeAsSec = time.asSeconds();
-    int animFrameTime = static_cast<int>((timeAsSec/AnimationDuration)*n_Frames)%n_Frames;
+    int animFrameTime = static_cast<int>((timeAsSec*3/AnimationDuration)*n_Frames)%n_Frames;
     texture.loadFromFile("../Sprite/Player/giocatore_sparo+mod.png");
     sprite.setTexture(texture);
     sprite.setTextureRect(sf::IntRect (animFrameTime*spriteSize.x,0,spriteSize.x,spriteSize.y));
