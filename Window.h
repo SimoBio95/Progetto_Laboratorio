@@ -11,11 +11,14 @@ public:
     Window();
     ~Window(){}
     bool isOpen();
-    void getEvent();
+    bool getEvent();
     void DrawSprite(sf::Sprite&);
     void DrawRectangle(sf::RectangleShape&);
     void clear();
     void display();
+
+    void close();
+
     sf::RectangleShape returnSfondo();
 
     sf::Vector2u getSize() const;

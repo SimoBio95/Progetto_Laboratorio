@@ -1,4 +1,5 @@
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 
 #ifndef PROGETTO_LABORATORIO_GAMECHARACTER_H

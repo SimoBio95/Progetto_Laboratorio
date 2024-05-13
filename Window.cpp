@@ -24,7 +24,7 @@ bool Window::isOpen() {
    return Finestra->isOpen();
 }
 
-void Window::getEvent() {
+bool Window::getEvent() {
     while(Finestra->pollEvent(Event)){
         switch(Event.type){
             case sf::Event::EventType::Closed:
@@ -32,10 +32,11 @@ void Window::getEvent() {
                 break;
             case sf::Event::EventType::KeyPressed:
             if(Event.key.code == sf::Keyboard::Escape)
-                Finestra->close();
+                return true;
             break;
         }
     }
+    return false;
 }
 
 sf::Vector2u Window::getSize() const {
@@ -54,4 +55,8 @@ void Window::display() {
 
 sf::RectangleShape Window::returnSfondo() {
     return SfondoFinestra;
+}
+
+void Window::close(){
+    Finestra->close();
 }

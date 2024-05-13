@@ -1,15 +1,10 @@
-#include <iostream>
 #include "Window.h"
 #include "GameEngine.h"
 #include "Player.h"
-#include "SFML/Graphics.hpp"
-#include "SFML/Window.hpp"
 
 
 int main() {
-    Window Finestra;
-    Player Giocatore;
-    GameEngine Game(&Finestra,Giocatore);
+    GameEngine Game;
 
 
     Game.GameRun();

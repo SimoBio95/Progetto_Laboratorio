@@ -1,9 +1,17 @@
 #include "GameEngine.h"
 
-GameEngine::GameEngine(Window* Finestra,Player& Giocatore):Sfondo(Finestra->returnSfondo()),PlayerSprite(Giocatore.getSprite()){
+enum choose{inGame,onMenu};
+
+static choose chooseWindow;
+
+
+GameEngine::GameEngine(){
     test = new sf::Sprite;
-    FinestraDiGioco = Finestra;
-    Giocatore.setUpSprite(PlayerSprite,Finestra->getSize().x,Finestra->getSize().y);
+    this->Giocatore = new Player();
+    //Giocatore.setUpSprite(PlayerSprite,Finestra->getSize().x,Finestra->getSize().y);
+    //sound->setBuffer(*(sound->initSound("../Audio/game.wav")));
+
+
 
    /* std::cout <<"Widht:"<< PlayerSprite.getGlobalBounds().width <<  "   Height:" << PlayerSprite.getGlobalBounds().height << std::endl;
     std::cout <<"X:"<< PlayerSprite.getPosition().x << "   Y:" << PlayerSprite.getPosition().y  << std::endl;
@@ -34,30 +42,70 @@ void GameEngine::RenderGame() {
 }
 
 void GameEngine::GameRun(){
-    while(FinestraDiGioco->isOpen()) {
-        deltaTime = clock.restart();
-        FinestraDiGioco->getEvent();
-        animation();
-        RenderGame();
+   // sound->play();
+    //sound->setLoop();
+    chooseWindow = onMenu;
+    bool run = true;
+    while(run){
+    switch (chooseWindow){
+        case (onMenu):
+            menu = new Menu(800,600,"Menu");
+            menu->setMenuText("../Sprite/finestredigioco/finestra1.png",sf::Vector2f (600,800));
+            while(menu->isOpen()){
+                menu->clear();
+                menu->draw(*menu->getMenu());
+                menu->display();
+                if(menu->getEvent()){
+                    chooseWindow = inGame;
+                }
+            }
+            break;
+        case (inGame):{
+            FinestraDiGioco = new Window();
+            Sfondo = FinestraDiGioco->returnSfondo();
+            PlayerSprite = Giocatore->getSprite();
+            Giocatore->setUpSprite(PlayerSprite,FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y);
+            while(FinestraDiGioco->isOpen()){
+                deltaTime = clock.restart();
+                animation();
+                RenderGame();
+                if(FinestraDiGioco->getEvent()){
+                    FinestraDiGioco->close();
+                    run = false;
+                }
+            }
+            break;
+        }
 
     }
+    }
+    delete menu;
+    delete FinestraDiGioco;
+    delete Giocatore;
 }
-
 
 
 void GameEngine::Update() {
     //std::cout <<"\n" << PlayerSprite.getPosition().x << " \n" <<  PlayerSprite.getPosition().y ;
     //Collisions:
-    Giocatore.Collision(FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y,PlayerSprite);
-    Giocatore.Movement(PlayerSprite);
+    Giocatore->Collision(FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y,PlayerSprite);
+    Giocatore->Movement(PlayerSprite);
 }
 
 
 void GameEngine::animation() {
     elapsedTime += deltaTime;
-    Giocatore.animation(elapsedTime,3,1,PlayerSprite);
+    Giocatore->animation(elapsedTime,3,1,PlayerSprite);
     float timeasSec = elapsedTime.asSeconds();
     int animFrame = static_cast<int>((timeasSec/animationDuration)*framesnum)%framesnum;
     test->setTextureRect(sf::IntRect (animFrame*spritesize.x,0,spritesize.x,spritesize.y));
 
 }
+
+ // Da riutilizzare per Gamerun
+/*while(FinestraDiGioco->isOpen()) {
+                deltaTime = clock.restart();
+                FinestraDiGioco->getEvent();
+                animation();
+                RenderGame();
+            }*/

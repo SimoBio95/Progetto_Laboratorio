@@ -13,6 +13,10 @@ add_executable(Progetto_Laboratorio  main.cpp
         GameEngine.h
         Player.cpp
         Player.h
+        Sound.cpp
+        Sound.h
+        Menu.cpp
+        Menu.h
 )
 
 include_directories(/usr/local/include)
