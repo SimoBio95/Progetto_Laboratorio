@@ -14,11 +14,14 @@ public:
     Menu(){};
     Menu(unsigned int , unsigned int , std::string);
     bool isOpen();
-    bool getEvent();
+    char getEvent();
     void setMenuText(const std::string &,sf::Vector2f );
     void draw(const sf::RectangleShape&);
     void clear();
     void display();
+    void setVisible(bool);
+
+    void close();
 
     sf::RectangleShape* getMenu();
 

@@ -1,15 +1,26 @@
 #include "GameEngine.h"
 
-enum choose{inGame,onMenu};
+enum choose{inGame,onMenu,Exit};
 
 static choose chooseWindow;
 
 
 GameEngine::GameEngine(){
+
+    //Istanzia oggetti dinamicamente
     test = new sf::Sprite;
     this->Giocatore = new Player();
-    //Giocatore.setUpSprite(PlayerSprite,Finestra->getSize().x,Finestra->getSize().y);
-    //sound->setBuffer(*(sound->initSound("../Audio/game.wav")));
+    menu = new Menu(800,600,"Menu");
+    sound->setBuffer(*(sound->initSound("../Audio/game.wav")));
+    FinestraDiGioco = new Window();
+
+    //set Up generale di Finestre,Suono,Giocatore
+    FinestraDiGioco->setVisible(false);
+    Sfondo = FinestraDiGioco->returnSfondo();
+    PlayerSprite = Giocatore->getSprite();
+    Giocatore->setUpSprite(PlayerSprite,FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y);
+    menu->setMenuText("../Sprite/finestredigioco/finestra1.png",sf::Vector2f (600,800));
+    //menu->setVisible(true);
 
 
 
@@ -35,58 +46,64 @@ void GameEngine::DrawAll() {
 }
 
 void GameEngine::RenderGame() {
-    Update();
     FinestraDiGioco->clear();
     DrawAll();
     FinestraDiGioco->display();
 }
 
 void GameEngine::GameRun(){
-   // sound->play();
-    //sound->setLoop();
+    sound->play();
+    sound->setLoop();
     chooseWindow = onMenu;
     bool run = true;
     while(run){
-    switch (chooseWindow){
-        case (onMenu):
-            menu = new Menu(800,600,"Menu");
-            menu->setMenuText("../Sprite/finestredigioco/finestra1.png",sf::Vector2f (600,800));
-            while(menu->isOpen()){
-                menu->clear();
-                menu->draw(*menu->getMenu());
-                menu->display();
-                if(menu->getEvent()){
-                    chooseWindow = inGame;
-                }
-            }
+        deltaTime = clock.restart();
+        switch (chooseWindow){
+        case(Exit):{
+            run = false;
             break;
-        case (inGame):{
-            FinestraDiGioco = new Window();
-            Sfondo = FinestraDiGioco->returnSfondo();
-            PlayerSprite = Giocatore->getSprite();
-            Giocatore->setUpSprite(PlayerSprite,FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y);
-            while(FinestraDiGioco->isOpen()){
-                deltaTime = clock.restart();
-                animation();
-                RenderGame();
-                if(FinestraDiGioco->getEvent()){
-                    FinestraDiGioco->close();
-                    run = false;
-                }
+        }
+        case (onMenu):{
+            char decision = menu->getEvent();
+            menu->setVisible(true);
+            menu->clear();
+            menu->draw(*menu->getMenu());
+            menu->display();
+            if (decision == 'K'){
+                menu->setVisible(false);
+                FinestraDiGioco->setVisible(true);
+                chooseWindow = inGame;
             }
             break;
         }
+        case (inGame):{
+            char decision = FinestraDiGioco->getEvent();
+            if(decision == 'E'){
+                chooseWindow = onMenu;
+                menu->setVisible(true);
+            }
 
-    }
-    }
-    delete menu;
-    delete FinestraDiGioco;
-    delete Giocatore;
+            if(decision == 'S' ){
+                menu->close();
+                chooseWindow = Exit;
+                break;
+            }else{
+
+            animation();
+            Update();
+
+            FinestraDiGioco->clear();
+            DrawAll();
+            FinestraDiGioco->display();
+            }
+            break;
+        }
+        }
+}
 }
 
 
 void GameEngine::Update() {
-    //std::cout <<"\n" << PlayerSprite.getPosition().x << " \n" <<  PlayerSprite.getPosition().y ;
     //Collisions:
     Giocatore->Collision(FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y,PlayerSprite);
     Giocatore->Movement(PlayerSprite);

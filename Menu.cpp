@@ -24,19 +24,18 @@ bool Menu::isOpen() {
     return menu->isOpen();
 }
 
-bool Menu::getEvent() {
-    bool options = false;
+char Menu::getEvent() {
+    char decision = 'D'; //default
     while(menu->pollEvent(event)){
         switch (event.type){
             case (sf::Event::EventType::KeyPressed):
                 if(event.key.code == sf::Keyboard::Escape){
-                    options = true;
-                    menu->close();
+                    decision = 'K';
                 }
                 break;
         }
     }
-    return options;
+    return decision;
 }
 
 void Menu::display() {
@@ -53,4 +52,12 @@ void Menu::draw(const sf::RectangleShape& windowMenu) {
 
 sf::RectangleShape* Menu::getMenu() {
     return windowShape;
+}
+
+void Menu::setVisible(bool set) {
+    menu->setVisible(set);
+}
+
+void Menu::close(){
+    menu->close();
 }

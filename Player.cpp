@@ -86,7 +86,6 @@ void Player::setUpTexture(sf::Sprite& sprite) {
         case normal_mode:
             texture.loadFromFile("../Sprite/Player/giocatore.png");
             sprite.setTexture(texture);
-
             break;
     }
 }

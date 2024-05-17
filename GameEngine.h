@@ -11,16 +11,18 @@
 class GameEngine {
 public:
     GameEngine();
-    void RenderGame();
-    void DrawAll();
-    void Update();
+
     void GameRun();
 
-    void animation();
 
 
 
 private:
+    void RenderGame();
+    void DrawAll();
+    void Update();
+    void animation();
+
     Window* FinestraDiGioco;
     Player* Giocatore;
     sf::RectangleShape Sfondo;

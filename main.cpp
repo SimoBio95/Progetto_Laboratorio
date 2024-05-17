@@ -5,12 +5,8 @@
 
 int main() {
     GameEngine Game;
-
-
     Game.GameRun();
-
-
-return 0;
+    return 0;
 }
 
 //Continuare con Proiettili, arma e quindi con texture nuove.

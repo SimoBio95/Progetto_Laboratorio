@@ -3,6 +3,8 @@
 //
 #include "SFML/Audio.hpp"
 
+using namespace std;
+
 #ifndef PROGETTO_LABORATORIO_SOUND_H
 #define PROGETTO_LABORATORIO_SOUND_H
 

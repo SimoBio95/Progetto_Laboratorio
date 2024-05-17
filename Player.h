@@ -24,8 +24,8 @@ public:
 
 private:
     sf::Vector2f currentVelocity = sf::Vector2f(0.f,0.f);
-    float gravity = 6.5f;
-    float jumpVelocity = -40.f;
+    float gravity = 4.f;
+    float jumpVelocity = -30.f;
     bool isJumping = false;
     sf::SoundBuffer buffer;
     sf::Sound sound;

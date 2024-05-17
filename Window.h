@@ -10,12 +10,17 @@ class Window {
 public:
     Window();
     ~Window(){}
+
     bool isOpen();
-    bool getEvent();
+    char getEvent();
+
     void DrawSprite(sf::Sprite&);
     void DrawRectangle(sf::RectangleShape&);
+
     void clear();
     void display();
+    void setVisible(bool);
+    void setActive(bool);
 
     void close();
 
