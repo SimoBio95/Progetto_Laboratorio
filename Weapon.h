@@ -5,12 +5,23 @@
 
 
 class Weapon {
+
 public:
-    Weapon(){}
-    Weapon(sf::Sprite);
-private:
+
+    Weapon();
+    Weapon(int atk,int atkspeed,int ammo):atk(atk),atkspeed(atkspeed),ammo(ammo){}
+
+    sf::Sprite& getSprite();
+
+
+protected:
+
+    sf::Texture texture;
     sf::Sprite sprite;
-int atk;
+    int atk;
+    int atkspeed;
+    int ammo;
+
 };
 
 

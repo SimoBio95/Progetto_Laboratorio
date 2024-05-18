@@ -9,9 +9,9 @@ GameEngine::GameEngine(){
 
     //Istanzia oggetti dinamicamente
     test = new sf::Sprite;
-    this->Giocatore = new Player();
+    Giocatore = new Player();
     menu = new Menu(800,600,"Menu");
-    sound->setBuffer(*(sound->initSound("../Audio/game.wav")));
+    sound->setBuffer(*(sound->initSound("../Audio/progettoL.wav")));
     FinestraDiGioco = new Window();
 
     //set Up generale di Finestre,Suono,Giocatore
@@ -20,13 +20,9 @@ GameEngine::GameEngine(){
     PlayerSprite = Giocatore->getSprite();
     Giocatore->setUpSprite(PlayerSprite,FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y);
     menu->setMenuText("../Sprite/finestredigioco/finestra1.png",sf::Vector2f (600,800));
-    //menu->setVisible(true);
 
 
 
-   /* std::cout <<"Widht:"<< PlayerSprite.getGlobalBounds().width <<  "   Height:" << PlayerSprite.getGlobalBounds().height << std::endl;
-    std::cout <<"X:"<< PlayerSprite.getPosition().x << "   Y:" << PlayerSprite.getPosition().y  << std::endl;
-    std::cout << "Orig.X:" << PlayerSprite.getOrigin().x << " Orig.Y:" << PlayerSprite.getOrigin().y ;*/
 
 
     //test
@@ -36,7 +32,6 @@ GameEngine::GameEngine(){
     test->setScale(2,2);
     test->setPosition(350,350);
     test->setTextureRect(sf::IntRect(0,0,spritesize.x,spritesize.y));
-   // std::cout <<"X:"<< test.getPosition().x << "   Y:" << test.getPosition().y  << std::endl;
 }
 
 void GameEngine::DrawAll() {
@@ -58,6 +53,8 @@ void GameEngine::GameRun(){
     bool run = true;
     while(run){
         deltaTime = clock.restart();
+        elapsedTime += deltaTime;
+        Giocatore->setTime(elapsedTime);
         switch (chooseWindow){
         case(Exit):{
             run = false;
@@ -88,13 +85,9 @@ void GameEngine::GameRun(){
                 chooseWindow = Exit;
                 break;
             }else{
-
-            animation();
-            Update();
-
-            FinestraDiGioco->clear();
-            DrawAll();
-            FinestraDiGioco->display();
+                //animation();
+                Update();
+                RenderGame();
             }
             break;
         }
@@ -112,7 +105,7 @@ void GameEngine::Update() {
 
 void GameEngine::animation() {
     elapsedTime += deltaTime;
-    Giocatore->animation(elapsedTime,3,1,PlayerSprite);
+    //Giocatore->animation(elapsedTime,3,1,PlayerSprite);
     float timeasSec = elapsedTime.asSeconds();
     int animFrame = static_cast<int>((timeasSec/animationDuration)*framesnum)%framesnum;
     test->setTextureRect(sf::IntRect (animFrame*spritesize.x,0,spritesize.x,spritesize.y));

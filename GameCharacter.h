@@ -11,7 +11,7 @@ public:
     GameCharacter(){}
     GameCharacter(int,int,int);
 
-    virtual void animation(sf::Time,int,int,sf::Sprite&) = 0;
+    virtual void animation(sf::Time,int,int,sf::Sprite&,std::string,int) = 0;
 
     int getHP();
     int getATK();

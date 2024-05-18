@@ -17,6 +17,8 @@ add_executable(Progetto_Laboratorio  main.cpp
         Sound.h
         Menu.cpp
         Menu.h
+        MachineGun.cpp
+        MachineGun.h
 )
 
 include_directories(/usr/local/include)

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Sound.h"
 #include "Menu.h"
+#include "MachineGun.h"
 
 #ifndef PROGETTO_LABORATORIO_GAMEENGINE_H
 #define PROGETTO_LABORATORIO_GAMEENGINE_H
@@ -42,6 +43,7 @@ private:
 
     Sound* sound;
     Menu* menu;
+
 
 
 };

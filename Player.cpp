@@ -4,15 +4,17 @@
 #include <iostream>
 #include "Player.h"
 
-enum eventTexture {shooting,normal_mode};
-static eventTexture eventoinGame;
+eventTexture Player::eventoinGame = normal_mode;
+
 
 Player::Player():GameCharacter(10,10,10){
-    eventoinGame = normal_mode;
-    if(!texture.loadFromFile("../Sprite/Player/giocatore.png"))
+    if(!texture.loadFromFile("../Sprite/Player/moveright.png"))
         std::cout << "Player non caricato" << std::endl;
     sprite.setTexture(texture);
-    sprite.setTextureRect(sf::IntRect (0,0,25,32));
+    sprite.setTextureRect(sf::IntRect (0,0,35,32));
+
+    weapon = new MachineGun();
+
 }
 
 sf::Sprite Player::getSprite() {
@@ -20,16 +22,17 @@ sf::Sprite Player::getSprite() {
 }
 
 void Player::Movement(sf::Sprite& sprite) {
+    elapsedTime += deltaTime;
     sprite.move(0,5);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        setUpTexture(sprite);
+        eventoinGame = moveL;
+        setUpTexture(sprite,eventoinGame);
         sprite.move(-10.f,0);
-        sprite.setTextureRect(sf::IntRect (30,0,25,32));
     }
     if(sf::Keyboard::isKeyPressed((sf::Keyboard::D))){
-        setUpTexture(sprite);
+        eventoinGame = moveR;
+        setUpTexture(sprite,eventoinGame);
         sprite.move(10.f,0);
-        sprite.setTextureRect(sf::IntRect(0,0,25,32));
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
        if(!isJumping){
@@ -46,15 +49,22 @@ void Player::Movement(sf::Sprite& sprite) {
        }
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-        setUpTexture(sprite);
+        eventoinGame = normal_mode;
+        setUpTexture(sprite,eventoinGame);
         sprite.move(0,10.f);
-        sprite.setTextureRect(sf::IntRect (95,0,25,32));
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)){
-        eventoinGame = shooting;
-        setUpTexture(sprite);
-        eventoinGame = normal_mode;
+        eventTexture shootEvent = eventoinGame;
+        if(shootEvent == moveR || shootEvent == shootingR){
+            eventoinGame = shootingR;
+            setUpTexture(sprite,eventoinGame);
+        }
+        if(shootEvent == moveL || shootEvent == shootingL){
+            eventoinGame = shootingL;
+            setUpTexture(sprite,eventoinGame);
+        }
     }
+    //eventoinGame = normal_mode;
 }
 
 void Player::Collision(float x,float y,sf::Sprite& sprite){
@@ -76,24 +86,42 @@ void Player::setUpSprite(sf::Sprite& sprite,float x,float y){
     sprite.setPosition(0,y - sprite.getGlobalBounds().height);
 }
 
-void Player::setUpTexture(sf::Sprite& sprite) {
-    switch (eventoinGame) {
-        case shooting:
-        texture.loadFromFile("../Sprite/Player/giocatore_sparo+mod.png");
-        sprite.setTexture(texture);
-        sprite.setTextureRect(sf::IntRect(90,0,30,32) );
+void Player::setUpTexture(sf::Sprite& sprite,eventTexture evento) { // Setta le corrette animazioni di gioco in base agli input da tastiera
+    switch (evento) {
+        case shootingL:
+        animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootLeft.png",35);
         break;
         case normal_mode:
-            texture.loadFromFile("../Sprite/Player/giocatore.png");
+            texture.loadFromFile("../Sprite/Player/moveright.png");
             sprite.setTexture(texture);
+            sprite.setTextureRect(sf::IntRect (0,0,35,32));
             break;
+        case shootingR:
+            animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootright.png",35);
+            break;
+        case moveR:
+            animation(elapsedTime,3,5,sprite,"../Sprite/Player/moveright.png",25);
+            break;
+        case moveL:
+            animation(elapsedTime,3,5,sprite,"../Sprite/Player/moveleft.png",25);
     }
+
+    // da sistemare animation qua sotto con le nuove texture.
 }
 
-void Player::animation (sf::Time time,int n_Frames,int AnimationDuration,sf::Sprite& sprite){
+void Player::animation (sf::Time time,int n_Frames,int AnimationDuration,sf::Sprite& sprite,std::string directory,int n){
+    time = getTime();
     float timeAsSec = time.asSeconds();
-    int animFrameTime = static_cast<int>((timeAsSec*3/AnimationDuration)*n_Frames)%n_Frames;
-    texture.loadFromFile("../Sprite/Player/giocatore_sparo+mod.png");
+    int animFrameTime = static_cast<int>((timeAsSec*n/AnimationDuration)*n_Frames)%n_Frames;
+    texture.loadFromFile(directory);
     sprite.setTexture(texture);
     sprite.setTextureRect(sf::IntRect (animFrameTime*spriteSize.x,0,spriteSize.x,spriteSize.y));
+}
+
+void Player::setTime(sf::Time time){
+    elapsedTime = time;
+}
+
+sf::Time Player::getTime(){
+    return elapsedTime;
 }

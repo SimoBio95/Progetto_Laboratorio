@@ -1,5 +1,5 @@
 #include "Weapon.h"
 
-Weapon::Weapon(sf::Sprite sprite) {
-    this->sprite = sprite;
+sf::Sprite &Weapon::getSprite() {
+    return sprite;
 }
