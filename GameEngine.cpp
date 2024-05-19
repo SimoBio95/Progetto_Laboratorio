@@ -11,7 +11,7 @@ GameEngine::GameEngine(){
     test = new sf::Sprite;
     Giocatore = new Player();
     menu = new Menu(800,600,"Menu");
-    sound->setBuffer(*(sound->initSound("../Audio/progettoL.wav")));
+    sound->initSound("../Audio/progettoL.wav");
     FinestraDiGioco = new Window();
 
     //set Up generale di Finestre,Suono,Giocatore

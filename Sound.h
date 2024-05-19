@@ -15,6 +15,10 @@ public:
     void setBuffer(sf::SoundBuffer&);
     void play();
     void setLoop();
+    void stop();
+    void pause();
+    void setVolume(float);
+
 private:
     std::string directory;
     sf::SoundBuffer* buffer;

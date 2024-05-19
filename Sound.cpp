@@ -6,10 +6,13 @@
 
 
 sf::SoundBuffer* Sound::initSound(const std::string & percorso_file){
-    this->buffer = new sf::SoundBuffer;
-   if(!buffer->loadFromFile(percorso_file)){
-       std::cout << "Audio non caricato!" ;
+    directory = percorso_file;
+    buffer = new sf::SoundBuffer;
+   if(!buffer->loadFromFile(directory)){
+       std::cout << "Audio non caricato!: " << directory  ;
    }
+   sound = new sf::Sound;
+   sound->setBuffer(*buffer);
    return buffer;
 }
 
@@ -24,5 +27,17 @@ void Sound::play() {
 
 void Sound::setLoop() {
     sound->setLoop(true);
+}
+
+void Sound::stop() {
+    sound->stop();
+}
+
+void Sound::pause(){
+    sound->pause();
+}
+
+void Sound::setVolume(float x) {
+    sound->setVolume(x);
 }
 

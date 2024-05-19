@@ -1,7 +1,7 @@
 //
 // Created by Simone Biondi on 17/05/24.
 //
-
+#include "Sound.h"
 #include "Weapon.h"
 
 #ifndef PROGETTO_LABORATORIO_MACHINEGUN_H

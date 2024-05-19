@@ -28,24 +28,23 @@ public:
     void setTime(sf::Time);
     sf::Time getTime();
 
-    sf::Vector2i spriteSize = sf::Vector2i (40,32);
+    sf::Vector2i spriteSize = sf::Vector2i (42,32);
 
 private:
     sf::Vector2f currentVelocity = sf::Vector2f(0.f,0.f);
     float gravity = 4.f;
     float jumpVelocity = -30.f;
     bool isJumping = false;
-    sf::SoundBuffer buffer;
-    sf::Sound sound;
 
-    Weapon* weapon;
+
 
     sf::Time deltaTime;
     sf::Clock clock;
     sf::Time elapsedTime;
 
+    Weapon* weapon;
 
-
+    bool gun_shot = false;
 
 };
 

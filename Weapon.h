@@ -3,24 +3,25 @@
 #ifndef PROGETTO_LABORATORIO_WEAPON_H
 #define PROGETTO_LABORATORIO_WEAPON_H
 
+#include "Sound.h"
 
 class Weapon {
 
 public:
 
-    Weapon();
-    Weapon(int atk,int atkspeed,int ammo):atk(atk),atkspeed(atkspeed),ammo(ammo){}
+    Weapon(){};
 
     sf::Sprite& getSprite();
+    Sound getSound();
 
 
 protected:
 
+    Sound* sound;
+
     sf::Texture texture;
     sf::Sprite sprite;
-    int atk;
-    int atkspeed;
-    int ammo;
+
 
 };
 
