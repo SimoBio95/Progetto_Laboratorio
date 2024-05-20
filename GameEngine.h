@@ -4,6 +4,8 @@
 #include "Sound.h"
 #include "Menu.h"
 #include "MachineGun.h"
+#include "Bullets.h"
+#include <vector>
 
 #ifndef PROGETTO_LABORATORIO_GAMEENGINE_H
 #define PROGETTO_LABORATORIO_GAMEENGINE_H
@@ -18,6 +20,10 @@ public:
 
 
 private:
+
+    void setBullet();
+    void addBullet();
+
     void RenderGame();
     void DrawAll();
     void Update();
@@ -28,6 +34,8 @@ private:
     sf::RectangleShape Sfondo;
     sf::Sprite PlayerSprite;
 
+    MachineGun* machineGun;
+
 
     sf::Time deltaTime;
     sf::Clock clock;
@@ -35,6 +43,8 @@ private:
     int framesnum = 3;
     float animationDuration = 1;
 
+    Bullets* bullet;
+    vector<Bullets> projectiles;
 
     sf::Sprite* test;
     sf::Texture texture;

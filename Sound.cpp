@@ -13,6 +13,7 @@ sf::SoundBuffer* Sound::initSound(const std::string & percorso_file){
    }
    sound = new sf::Sound;
    sound->setBuffer(*buffer);
+    std::cout <<"Audio caricato1  " ;
    return buffer;
 }
 

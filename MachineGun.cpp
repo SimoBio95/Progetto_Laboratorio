@@ -4,7 +4,7 @@
 #include <iostream>
 #include "MachineGun.h"
 
-MachineGun::MachineGun(){
+MachineGun::MachineGun(): Weapon(10,2,100){
     sound = new Sound;
     sound->initSound("../Audio/mitra.mp3");
     std::cout << "mitra caricato" ;

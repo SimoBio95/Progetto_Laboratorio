@@ -2,8 +2,7 @@
 // Created by Simone Biondi on 06/05/24.
 //
 #include "GameCharacter.h"
-#include "Weapon.h"
-#include "MachineGun.h"
+
 
 #ifndef PROGETTO_LABORATORIO_PLAYER_H
 #define PROGETTO_LABORATORIO_PLAYER_H
@@ -17,18 +16,32 @@ public:
     static eventTexture eventoinGame;
     sf::Sprite getSprite();
 
+    static eventTexture getEventPlayer();
+
     void Movement(sf::Sprite&);
     void Collision(float,float,sf::Sprite&);
+
+    sf::Vector2f getPos();
 
     void setUpSprite(sf::Sprite&,float,float);
     void setUpTexture(sf::Sprite&,eventTexture);
 
     void animation(sf::Time,int,int,sf::Sprite&,std::string,int) override;
 
+    sf::FloatRect getGlobalBounds();
+
     void setTime(sf::Time);
     sf::Time getTime();
 
+    Player* getPlayer();
+
+    Weapon* getWeapon();
+
     sf::Vector2i spriteSize = sf::Vector2i (42,32);
+
+    bool isShooting() const;
+
+    sf::Vector2f getScale();
 
 private:
     sf::Vector2f currentVelocity = sf::Vector2f(0.f,0.f);

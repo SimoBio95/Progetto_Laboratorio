@@ -7,3 +7,8 @@ sf::Sprite &Weapon::getSprite() {
 Sound Weapon::getSound(){
     return *sound;
 }
+
+float Weapon::getAtkSpeed() const{
+    return atkspeed;
+}
+

@@ -8,20 +8,25 @@ static choose chooseWindow;
 GameEngine::GameEngine(){
 
     //Istanzia oggetti dinamicamente
+
+
     test = new sf::Sprite;
     Giocatore = new Player();
     menu = new Menu(800,600,"Menu");
     sound->initSound("../Audio/progettoL.wav");
     FinestraDiGioco = new Window();
+    bullet = new Bullets();
+    machineGun = new MachineGun;
+
 
     //set Up generale di Finestre,Suono,Giocatore
+
     FinestraDiGioco->setVisible(false);
     Sfondo = FinestraDiGioco->returnSfondo();
     PlayerSprite = Giocatore->getSprite();
     Giocatore->setUpSprite(PlayerSprite,FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y);
     menu->setMenuText("../Sprite/finestredigioco/finestra1.png",sf::Vector2f (600,800));
-
-
+    bullet->setBullet(Giocatore->getPos().x,Giocatore->getPos().y);
 
 
 
@@ -38,7 +43,18 @@ void GameEngine::DrawAll() {
     FinestraDiGioco->DrawRectangle(Sfondo);
     FinestraDiGioco->DrawSprite(PlayerSprite);
     FinestraDiGioco->DrawSprite(*test);
-}
+   for(int i = 0; i < projectiles.size(); i++){
+       setBullet();
+       /*if(projectiles[i].getSprite().getPosition().x > 1680){
+           FinestraDiGioco->DrawSprite(projectiles[i].getSprite());
+           bullet->animation(elapsedTime,3,5,projectiles[i].getSprite(),"../Sprite/SpriteWeapons/proiettili.png",45);
+       }else if(projectiles[i].getSprite().getPosition().x < 20){
+           bullet->animation(elapsedTime,3,5,projectiles[i].getSprite(),"../Sprite/SpriteWeapons/proiettili.png",45);
+           FinestraDiGioco->DrawSprite(projectiles[i].getSprite());*/
+       FinestraDiGioco->DrawSprite(projectiles[i].getSprite());
+       }
+    }
+
 
 void GameEngine::RenderGame() {
     FinestraDiGioco->clear();
@@ -96,26 +112,47 @@ void GameEngine::GameRun(){
 }
 
 
-void GameEngine::Update() {
-    //Collisions:
+void GameEngine::Update() { //Collisions + shooting check
     Giocatore->Collision(FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y,PlayerSprite);
     Giocatore->Movement(PlayerSprite);
+    if(Giocatore->isShooting()){
+        addBullet();
+    }
 }
 
 
 void GameEngine::animation() {
     elapsedTime += deltaTime;
-    //Giocatore->animation(elapsedTime,3,1,PlayerSprite);
     float timeasSec = elapsedTime.asSeconds();
     int animFrame = static_cast<int>((timeasSec/animationDuration)*framesnum)%framesnum;
     test->setTextureRect(sf::IntRect (animFrame*spritesize.x,0,spritesize.x,spritesize.y));
-
 }
 
- // Da riutilizzare per Gamerun
-/*while(FinestraDiGioco->isOpen()) {
-                deltaTime = clock.restart();
-                FinestraDiGioco->getEvent();
-                animation();
-                RenderGame();
-            }*/
+
+void GameEngine::addBullet() {
+    if(Bullets::shootTimer >= 7){
+        bullet->setBullet(PlayerSprite.getPosition().x +32,PlayerSprite.getPosition().y +32);
+        if(Giocatore->getEventPlayer() == shootingL){
+            bullet->setDirection(Left);
+            projectiles.push_back(*bullet);
+        }else if( Giocatore->getEventPlayer() == shootingR){
+            bullet->setDirection(Right);
+            projectiles.push_back(*bullet);
+        }
+        Bullets::shootTimer = 0;
+    }else{
+        Bullets::shootTimer++;
+    }
+}
+
+void GameEngine::setBullet() { //Check collisions and scale of the projectile, depending on the player movements
+    for(int i = 0; i < projectiles.size(); i++){
+        projectiles[i].update(projectiles[i].getDirection(),projectiles[i].getSprite(),machineGun->getAtkSpeed(),elapsedTime);
+        if(projectiles[i].getSprite().getPosition().x > FinestraDiGioco->getSize().x + 100){
+            projectiles.erase(projectiles.begin() + i);
+    }
+        if(projectiles[i].getSprite().getPosition().x < 0 - 100){
+            projectiles.erase(projectiles.begin() +i) ;
+        }
+    }
+}

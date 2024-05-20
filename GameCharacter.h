@@ -1,6 +1,7 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
-
+#include "Weapon.h"
+#include "MachineGun.h"
 
 #ifndef PROGETTO_LABORATORIO_GAMECHARACTER_H
 #define PROGETTO_LABORATORIO_GAMECHARACTER_H
@@ -12,6 +13,7 @@ public:
     GameCharacter(int,int,int);
 
     virtual void animation(sf::Time,int,int,sf::Sprite&,std::string,int) = 0;
+
 
     int getHP();
     int getATK();

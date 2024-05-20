@@ -9,16 +9,21 @@ class Weapon {
 
 public:
 
-    Weapon(){};
+    Weapon(float atk,float atkspeed,int ammo):atk(atk),atkspeed(atkspeed),ammo(ammo){};
 
     sf::Sprite& getSprite();
+
     Sound getSound();
 
+    float getAtkSpeed() const;
 
 protected:
 
-    Sound* sound;
+    float atk;
+    float atkspeed;
+    int ammo;
 
+    Sound* sound;
     sf::Texture texture;
     sf::Sprite sprite;
 

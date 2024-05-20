@@ -73,3 +73,4 @@ void Window::setVisible(bool set) {
 void Window::setActive(bool set) {
     Finestra->setActive(set);
 }
+

@@ -138,3 +138,31 @@ void Player::setTime(sf::Time time){
 sf::Time Player::getTime(){
     return elapsedTime;
 }
+
+sf::Vector2f Player::getPos() {
+    return sprite.getPosition();
+}
+
+sf::FloatRect Player::getGlobalBounds() {
+    return sprite.getGlobalBounds();
+}
+
+Weapon* Player::getWeapon() {
+    return weapon;
+}
+
+Player* Player::getPlayer(){
+    return this;
+}
+
+bool Player::isShooting() const {
+   return gun_shot;
+}
+
+sf::Vector2f Player::getScale() {
+    return sprite.getScale();
+}
+
+eventTexture Player::getEventPlayer() {
+    return eventoinGame;
+}
