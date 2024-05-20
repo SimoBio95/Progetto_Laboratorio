@@ -17,6 +17,7 @@ GameEngine::GameEngine(){
     FinestraDiGioco = new Window();
     bullet = new Bullets();
     machineGun = new MachineGun;
+    enemy = new Enemy;
 
 
     //set Up generale di Finestre,Suono,Giocatore
@@ -45,14 +46,13 @@ void GameEngine::DrawAll() {
     FinestraDiGioco->DrawSprite(*test);
    for(int i = 0; i < projectiles.size(); i++){
        setBullet();
-       /*if(projectiles[i].getSprite().getPosition().x > 1680){
-           FinestraDiGioco->DrawSprite(projectiles[i].getSprite());
-           bullet->animation(elapsedTime,3,5,projectiles[i].getSprite(),"../Sprite/SpriteWeapons/proiettili.png",45);
-       }else if(projectiles[i].getSprite().getPosition().x < 20){
-           bullet->animation(elapsedTime,3,5,projectiles[i].getSprite(),"../Sprite/SpriteWeapons/proiettili.png",45);
-           FinestraDiGioco->DrawSprite(projectiles[i].getSprite());*/
        FinestraDiGioco->DrawSprite(projectiles[i].getSprite());
        }
+   for(int i = 0; i < enemies.size();i++){
+       setEnemy();
+       FinestraDiGioco->DrawSprite(enemies[i].getSprite());
+       std::cout << "Disegnato:" << i << " ";
+   }
     }
 
 
@@ -63,6 +63,7 @@ void GameEngine::RenderGame() {
 }
 
 void GameEngine::GameRun(){
+    srand(time(NULL));
     sound->play();
     sound->setLoop();
     chooseWindow = onMenu;
@@ -118,6 +119,8 @@ void GameEngine::Update() { //Collisions + shooting check
     if(Giocatore->isShooting()){
         addBullet();
     }
+    addEnemy();
+    collisionCheck();
 }
 
 
@@ -152,7 +155,54 @@ void GameEngine::setBullet() { //Check collisions and scale of the projectile, d
             projectiles.erase(projectiles.begin() + i);
     }
         if(projectiles[i].getSprite().getPosition().x < 0 - 100){
-            projectiles.erase(projectiles.begin() +i) ;
+            projectiles.erase(projectiles.begin() + i) ;
         }
+    }
+}
+
+void GameEngine::addEnemy() {
+    if(Enemy::spawnTime >= 30){
+        enemy->setEnemy(rand()%(10-1800),790);
+        if(enemy->getSprite().getPosition().x < FinestraDiGioco->getSize().x/2 - 200){ //Spawn nemico ai limiti della mappa
+            enemy->setDirection("right");
+            enemies.push_back(*enemy);
+        } else{ //Stessa cosa
+            std::cout << "NEmico ok left" ;
+            enemy->setDirection("left");
+            enemies.push_back(*enemy);
+        }
+
+        Enemy::spawnTime = 0;
+    }else
+        Enemy::spawnTime++;
+}
+
+void GameEngine::setEnemy() {
+    for (int i = 0; i < enemies.size(); i++){
+        enemies[i].update(enemies[i].getDirection(),enemies[i].getSprite(),elapsedTime);
+    }
+}
+
+void GameEngine::collisionCheck(){
+    for(int j = 0; j < enemies.size() ; j++){
+        for(int i = 0; i < projectiles.size(); i++){
+            if(enemies[j].getSprite().getGlobalBounds().intersects(projectiles[i].getSprite().getGlobalBounds()) && enemies[j].getDirection() != "dead"){
+                enemies[j].damageGet(machineGun->getAtk());
+                if(enemies[j].getHP() <= 0){
+                    enemies[j].setDirection("dead");
+                }
+                projectiles.erase(projectiles.begin() +i);
+            }
+            if(Giocatore->getSprite().getGlobalBounds().intersects(enemies[j].getSprite().getGlobalBounds())){
+                enemies.erase(enemies.begin() + j);
+        }
+        }
+        if(enemies[j].getSprite().getPosition().x > FinestraDiGioco->getSize().x)
+            enemies.erase(enemies.begin()+j);
+        if(Enemy::deadTime >= 50 && enemies[j].getDirection() == "dead"){
+            enemies.erase(enemies.begin()+j);
+            Enemy::deadTime = 0;
+        }else
+            Enemy::deadTime++;
     }
 }

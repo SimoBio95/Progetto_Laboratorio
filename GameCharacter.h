@@ -14,6 +14,8 @@ public:
 
     virtual void animation(sf::Time,int,int,sf::Sprite&,std::string,int) = 0;
 
+    void damageGet(int);
+
 
     int getHP();
     int getATK();

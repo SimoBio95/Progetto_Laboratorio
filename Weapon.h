@@ -16,6 +16,9 @@ public:
     Sound getSound();
 
     float getAtkSpeed() const;
+    int getAtk() const{
+        return atk;
+    }
 
 protected:
 

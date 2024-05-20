@@ -16,3 +16,7 @@ int GameCharacter::getATK() {
 int GameCharacter::getDEF() {
     return def;
 }
+
+void GameCharacter::damageGet(int damage){
+    hp = hp - (damage);
+}

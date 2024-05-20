@@ -5,7 +5,9 @@
 #include "Menu.h"
 #include "MachineGun.h"
 #include "Bullets.h"
+#include "Enemy.h"
 #include <vector>
+#include <ctime>
 
 #ifndef PROGETTO_LABORATORIO_GAMEENGINE_H
 #define PROGETTO_LABORATORIO_GAMEENGINE_H
@@ -23,6 +25,11 @@ private:
 
     void setBullet();
     void addBullet();
+
+    void addEnemy();
+    void setEnemy();
+
+    void collisionCheck();
 
     void RenderGame();
     void DrawAll();
@@ -45,6 +52,9 @@ private:
 
     Bullets* bullet;
     vector<Bullets> projectiles;
+
+    Enemy* enemy;
+    vector<Enemy> enemies;
 
     sf::Sprite* test;
     sf::Texture texture;
