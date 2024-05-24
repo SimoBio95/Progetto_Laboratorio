@@ -32,3 +32,15 @@ void Bullets::animation (sf::Time time,int n_Frames,int AnimationDuration,sf::Sp
     sprite.setTexture(texture1);
     sprite.setTextureRect(sf::IntRect (animFrameTime*spriteSize.x,0,spriteSize.x,spriteSize.y));
 }
+
+void Bullets::update(Direction dir,sf::Sprite& bullet,float atkspeed,const sf::Time& elapsedTime,float deltaTime) {
+    if (dir == Left) {
+        bullet.setScale(-1.5, 1);
+        bullet.move(-150*atkspeed*deltaTime*multiplier, 0);
+        animation(elapsedTime,4,3,bullet,"../Sprite/SpriteWeapons/proiettili.png",30);
+    } else if (dir == Right) {
+        bullet.setScale(1.5, 1);
+        bullet.move(150* atkspeed*deltaTime*multiplier, 0);
+        animation(elapsedTime,4,3,bullet,"../Sprite/SpriteWeapons/proiettili.png",30);
+    }
+}

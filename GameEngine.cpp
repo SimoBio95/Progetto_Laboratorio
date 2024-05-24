@@ -13,7 +13,7 @@ GameEngine::GameEngine(){
     test = new sf::Sprite;
     Giocatore = new Player();
     menu = new Menu(800,600,"Menu");
-    sound->initSound("../Audio/progettoL.wav");
+    sound->initSound("../Audio/musiclab.wav");
     FinestraDiGioco = new Window();
     bullet = new Bullets();
     machineGun = new MachineGun;
@@ -44,6 +44,7 @@ void GameEngine::DrawAll() {
     FinestraDiGioco->DrawRectangle(Sfondo);
     FinestraDiGioco->DrawSprite(PlayerSprite);
     FinestraDiGioco->DrawSprite(*test);
+    FinestraDiGioco->DrawRectangle(Giocatore->gethpBar());
    for(int i = 0; i < projectiles.size(); i++){
        setBullet();
        FinestraDiGioco->DrawSprite(projectiles[i].getSprite());
@@ -51,7 +52,7 @@ void GameEngine::DrawAll() {
    for(int i = 0; i < enemies.size();i++){
        setEnemy();
        FinestraDiGioco->DrawSprite(enemies[i].getSprite());
-       std::cout << "Disegnato:" << i << " ";
+       FinestraDiGioco->DrawRectangle(enemies[i].gethpBar());
    }
     }
 
@@ -115,7 +116,7 @@ void GameEngine::GameRun(){
 
 void GameEngine::Update() { //Collisions + shooting check
     Giocatore->Collision(FinestraDiGioco->getSize().x,FinestraDiGioco->getSize().y,PlayerSprite);
-    Giocatore->Movement(PlayerSprite);
+    Giocatore->Movement(PlayerSprite,Giocatore->gethpBar());
     if(Giocatore->isShooting()){
         addBullet();
     }
@@ -150,7 +151,7 @@ void GameEngine::addBullet() {
 
 void GameEngine::setBullet() { //Check collisions and scale of the projectile, depending on the player movements
     for(int i = 0; i < projectiles.size(); i++){
-        projectiles[i].update(projectiles[i].getDirection(),projectiles[i].getSprite(),machineGun->getAtkSpeed(),elapsedTime);
+        projectiles[i].update(projectiles[i].getDirection(),projectiles[i].getSprite(),machineGun->getAtkSpeed(),elapsedTime,clock.restart().asSeconds());
         if(projectiles[i].getSprite().getPosition().x > FinestraDiGioco->getSize().x + 100){
             projectiles.erase(projectiles.begin() + i);
     }
@@ -161,14 +162,13 @@ void GameEngine::setBullet() { //Check collisions and scale of the projectile, d
 }
 
 void GameEngine::addEnemy() {
-    if(Enemy::spawnTime >= 30){
+    if(Enemy::spawnTime >= 70){
         enemy->setEnemy(rand()%(10-1800),790);
         if(enemy->getSprite().getPosition().x < FinestraDiGioco->getSize().x/2 - 200){ //Spawn nemico ai limiti della mappa
-            enemy->setDirection("right");
+            enemy->setDirection(RIGHT);
             enemies.push_back(*enemy);
         } else{ //Stessa cosa
-            std::cout << "NEmico ok left" ;
-            enemy->setDirection("left");
+            enemy->setDirection(LEFT);
             enemies.push_back(*enemy);
         }
 
@@ -179,30 +179,31 @@ void GameEngine::addEnemy() {
 
 void GameEngine::setEnemy() {
     for (int i = 0; i < enemies.size(); i++){
-        enemies[i].update(enemies[i].getDirection(),enemies[i].getSprite(),elapsedTime);
+        enemies[i].update(enemies[i].getDirection(),enemies[i].getSprite(),elapsedTime,enemies[i].gethpBar(),clock.restart().asSeconds());
     }
 }
 
 void GameEngine::collisionCheck(){
     for(int j = 0; j < enemies.size() ; j++){
         for(int i = 0; i < projectiles.size(); i++){
-            if(enemies[j].getSprite().getGlobalBounds().intersects(projectiles[i].getSprite().getGlobalBounds()) && enemies[j].getDirection() != "dead"){
-                enemies[j].damageGet(machineGun->getAtk());
+            if(enemies[j].getSprite().getGlobalBounds().intersects(projectiles[i].getSprite().getGlobalBounds()) && enemies[j].getDirection() != Dead){
+                enemies[j].damageGet(machineGun->getAtk(),enemies[j].gethpBar());
                 if(enemies[j].getHP() <= 0){
-                    enemies[j].setDirection("dead");
+                    enemies[j].setDirection(Dead);
+                }
+                if(PlayerSprite.getGlobalBounds().intersects(enemies[j].getSprite().getGlobalBounds())){
+                    Giocatore->setHpDamageGet();
+                    enemies[j].damageGet(1,enemies[j].gethpBar());
                 }
                 projectiles.erase(projectiles.begin() +i);
             }
-            if(Giocatore->getSprite().getGlobalBounds().intersects(enemies[j].getSprite().getGlobalBounds())){
-                enemies.erase(enemies.begin() + j);
-        }
         }
         if(enemies[j].getSprite().getPosition().x > FinestraDiGioco->getSize().x)
             enemies.erase(enemies.begin()+j);
-        if(Enemy::deadTime >= 50 && enemies[j].getDirection() == "dead"){
+        if(enemies[j].getEnemyDead() >= 150 && enemies[j].getDirection() ==Dead){
             enemies.erase(enemies.begin()+j);
-            Enemy::deadTime = 0;
+            enemies[j].setEnemyDead(0);
         }else
-            Enemy::deadTime++;
+            enemies[j].setEnemyDead(enemies[j].getEnemyDead() + 1);
     }
 }

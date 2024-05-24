@@ -17,6 +17,7 @@ int GameCharacter::getDEF() {
     return def;
 }
 
-void GameCharacter::damageGet(int damage){
+void GameCharacter::damageGet(int damage,sf::RectangleShape& hpbar){
     hp = hp - (damage);
+    hpbar.setSize(sf::Vector2f(hpbar.getSize().x - damage,hpbar.getSize().y));
 }

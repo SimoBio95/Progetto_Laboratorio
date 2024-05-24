@@ -15,6 +15,12 @@ Player::Player():GameCharacter(10,10,10){
     sprite.setTextureRect(sf::IntRect (0,0,35,32));
     weapon = new MachineGun;
     weapon->getSound().setVolume(40.f);
+
+    hpBar.setOutlineColor(sf::Color::Black);
+    hpBar.setOutlineThickness(2);
+    hpBar.setFillColor(sf::Color::Green);
+    hpBar.setSize(sf::Vector2f(static_cast<float>(hp)*2,10));
+
 }
 
 sf::Sprite Player::getSprite() {
@@ -23,7 +29,8 @@ sf::Sprite Player::getSprite() {
 
 //Movimenti giocatori + set up delle corrette texture
 
-void Player::Movement(sf::Sprite& sprite) {
+void Player::Movement(sf::Sprite& sprite,sf::RectangleShape& hpbar) {
+    hpbar.setPosition(sprite.getPosition().x,sprite.getPosition().y);
     elapsedTime += deltaTime;
     sprite.move(0,5);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
@@ -103,7 +110,7 @@ void Player::setUpSprite(sf::Sprite& sprite,float x,float y){ //set up dello spr
 void Player::setUpTexture(sf::Sprite& sprite,eventTexture evento) { // Setta le corrette animazioni di gioco in base agli input da tastiera
     switch (evento) {
         case shootingL:
-        animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootLeft.png",45);
+        animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootLeft.png",75);
         break;
         case normal_mode:
             texture.loadFromFile("../Sprite/Player/moveright.png");
@@ -111,7 +118,7 @@ void Player::setUpTexture(sf::Sprite& sprite,eventTexture evento) { // Setta le 
             sprite.setTextureRect(sf::IntRect (0,0,35,32));
             break;
         case shootingR:
-            animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootright.png",45);
+            animation(elapsedTime,3,5,sprite,"../Sprite/Player/shootright.png",75);
             spriteSize = sf::Vector2i (40,32);
             break;
         case moveR:

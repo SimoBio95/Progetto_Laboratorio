@@ -30,21 +30,14 @@ public:
         return direction;
     }
 
-   void update(Direction dir,sf::Sprite& bullet,float atkspeed,const sf::Time& elapsedTime) {
-        if (dir == Left) {
-            bullet.setScale(-1.5, 1);
-            bullet.move(-5*atkspeed, 0);
-            animation(elapsedTime,4,3,bullet,"../Sprite/SpriteWeapons/proiettili.png",30);
-        } else if (dir == Right) {
-            bullet.setScale(1.5, 1);
-            bullet.move(5* atkspeed, 0);
-            animation(elapsedTime,4,3,bullet,"../Sprite/SpriteWeapons/proiettili.png",30);
-        }
-    }
+   void update(Direction dir,sf::Sprite& bullet,float atkspeed,const sf::Time& elapsedTime,float deltaTime);
+
 
 private:
     Direction direction;
 
+
+    float multiplier = 60.f;
 
     sf::Sprite sprite1;
     sf::Texture texture1;

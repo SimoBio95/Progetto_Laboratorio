@@ -18,7 +18,15 @@ public:
 
     static eventTexture getEventPlayer();
 
-    void Movement(sf::Sprite&);
+    void setHpDamageGet(){
+        hp--;
+    }
+
+    sf::RectangleShape& gethpBar(){
+        return hpBar;
+    }
+
+    void Movement(sf::Sprite&,sf::RectangleShape& hpbar);
     void Collision(float,float,sf::Sprite&);
 
     sf::Vector2f getPos();
@@ -58,6 +66,8 @@ private:
     Weapon* weapon;
 
     bool gun_shot = false;
+
+    sf::RectangleShape hpBar;
 
 };
 
